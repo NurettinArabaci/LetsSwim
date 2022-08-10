@@ -74,7 +74,7 @@ Material:
     - _DepthTransparency: 0.2
     - _DetailNormalMapScale: 1
     - _DistanceFade: 0.5
-    - _Distortion: 0.119
+    - _Distortion: 0.08
     - _DstBlend: 0
     - _EnableCustomFog: 0
     - _EnableProbeRelfections: 1
@@ -101,8 +101,8 @@ Material:
     - _NormalTiling: 0.07
     - _OcclusionStrength: 1
     - _Parallax: 0.02
-    - _ProbeReflectionIntensity: 0.578
-    - _RealtimeReflectionIntensity: 1
+    - _ProbeReflectionIntensity: 0.345
+    - _RealtimeReflectionIntensity: 0.252
     - _ReflectionIntensity: 0.385
     - _Refraction: 0.4
     - _RefractionDistance: 10

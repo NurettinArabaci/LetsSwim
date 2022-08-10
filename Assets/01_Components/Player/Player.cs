@@ -2,72 +2,102 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public partial class EventManager
+{
+
+    public static event System.Action OnPlayerMove;
+    public static void Fire_OnPlayerMove() { OnPlayerMove?.Invoke(); }
+}
+
 public class Player : MonoBehaviour
 {
-    Transform mT;
-    Animator mAnim;
-    Rigidbody rb;
-    float limitY = -10;
+    protected Transform mT;
+    protected Animator mAnim;
 
-    int speed = 10;
+    protected float limitY = 10;
+
+    protected SkinnedMeshRenderer mesh;
+
+    protected int speed = 10;
+
+    public List<ParticleSystem> bubbleFx;
 
     public static bool isActiveGame;
     public static bool upMovement;
     public static bool isSwim;
 
-    private void Awake()
+
+    protected virtual void Awake()
     {
         mT = transform;
         mAnim = GetComponentInChildren<Animator>();
-        rb = GetComponent<Rigidbody>();
-        Physics.gravity = Vector3.zero;
+
         isSwim = true;
-        
+
+        mesh = GetComponentInChildren<SkinnedMeshRenderer>();
+
+        BubbleFxActive(false);
+
     }
 
-    private void Update()
+    protected void Update()
+    {
+
+        StartMovement();
+    }
+
+    protected virtual void StartMovement()
     {
         if (Input.GetMouseButtonDown(0))
         {
-            mT.position += Vector3.down / 2;
+            mT.position += Vector3.down/4;
             upMovement = false;
+
+            BubbleFxActive(true);
+
             if (isSwim)
             {
-                mAnim.SetTrigger("swim");
+
+                ResetAnim(AnimParam.idle);
+                mAnim.SetTrigger(AnimParam.swim);
             }
-            isSwim = false;
             
+
+            isSwim = false;
+
         }
         else if (Input.GetMouseButton(0))
         {
-            
-            mT.position += (Vector3.forward+Vector3.down/4) * Time.deltaTime * speed;
-            mT.position = new Vector3(0, Mathf.Clamp(mT.position.y, -10, 2), mT.position.z);
-            
+
+            mT.position += (Vector3.forward + Vector3.down / 4) * Time.deltaTime * speed;
+            mT.position = new Vector3(0, Mathf.Clamp(mT.position.y, -limitY, limitY), mT.position.z);
+
         }
         else if (Input.GetMouseButtonUp(0))
         {
             upMovement = true;
-      
+
+
         }
 
         if (upMovement)
         {
-            mT.position += (Vector3.forward + Vector3.up) * Time.deltaTime * speed;
+            mT.position += (Vector3.forward + Vector3.up/2) * Time.deltaTime * speed;
         }
-
     }
 
-
-    private void OnTriggerEnter(Collider other)
+    protected void ResetAnim(string anim)
     {
-        if (other.CompareTag("Water"))
-        {
-
-            upMovement = false;
-            mAnim.SetTrigger("idle");
-            isSwim = true;
-        }
+        mAnim.ResetTrigger(anim);
     }
     
+    protected void BubbleFxActive(bool state)
+    {
+        foreach (var item in bubbleFx)
+        {
+            item.gameObject.SetActive(state);
+        }
+    }
+  
+
 }
