@@ -2,11 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerCollider : Player
+public class PlayerCollider : PlayerMovement
 {
+    
+
     protected override void Awake()
     {
         base.Awake();
+
+        BubbleFxActive(false);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -14,20 +18,19 @@ public class PlayerCollider : Player
         if (other.CompareTag(Tags.Water))
         {
             upMovement = false;
+            isSurface = true;
 
             mAnim.SetTrigger(AnimParam.idle);
-            isSwim = true;
-
             ResetAnim(AnimParam.swim);
 
             CheckPosition();
 
             BubbleFxActive(false);
 
-            print("Test PlayerCollider");
-
         }
     }
+
+    
 
     void CheckPosition()
     {
