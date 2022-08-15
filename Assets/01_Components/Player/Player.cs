@@ -16,7 +16,7 @@ public enum DamagePhase
     Low,
     Medium,
     Hard,
-    Death,
+    Die,
     Default
 
 }
@@ -27,6 +27,7 @@ public class Player : MonoBehaviour
 
     protected Transform mT;
     protected Animator mAnim;
+    protected Rigidbody rb;
 
     protected SkinnedMeshRenderer mesh;
 
@@ -48,6 +49,8 @@ public class Player : MonoBehaviour
         Application.targetFrameRate = 30;
         mT = transform;
         mAnim = GetComponentInChildren<Animator>();
+
+        rb = GetComponent<Rigidbody>();
 
         breath = 100;
 
@@ -83,7 +86,7 @@ public class Player : MonoBehaviour
             return DamagePhase.Hard;
 
         else if (breath < 5)
-            return DamagePhase.Death;
+            return DamagePhase.Die;
 
         else
             return DamagePhase.Default;
@@ -135,10 +138,9 @@ public class Player : MonoBehaviour
 
                 break;
 
-            case DamagePhase.Death:
+            case DamagePhase.Die:
 
-                isActiveGame = false;
-                mAnim.SetTrigger(AnimParam.die);
+                Die();
 
                 break;
 
@@ -151,21 +153,24 @@ public class Player : MonoBehaviour
 
 
 
-    
-
     protected void ResetAnim(string anim)
     {
-        mAnim.ResetTrigger(anim);
+       mAnim.ResetTrigger(anim);
     }
-    
-    
 
+
+
+    public static float Stamina
+    {
+        get { return PlayerPrefs.GetFloat("Stamina", 12);}
+        set { PlayerPrefs.SetFloat("Stamina", value);}
+    }
 
     protected void DecreaseBreath()
     {
         if (breath > 0)
         {
-            breath -= 12 * Time.deltaTime;
+            breath -= Stamina * Time.deltaTime;
         }
 
     }
@@ -174,10 +179,16 @@ public class Player : MonoBehaviour
     {
         if (breath<100)
         {
-            breath += 8*Time.deltaTime;
+            breath += Stamina * 0.7f * Time.deltaTime;
             
         }
 
+    }
+
+    protected void Die()
+    {
+        isActiveGame = false;
+        mAnim.SetTrigger(AnimParam.die);
     }
 
 }

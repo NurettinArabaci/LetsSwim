@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public class PlayerCollider : PlayerMovement
 {
@@ -22,10 +23,20 @@ public class PlayerCollider : PlayerMovement
 
             mAnim.SetTrigger(AnimParam.idle);
             ResetAnim(AnimParam.swim);
+           
 
             CheckPosition();
 
             BubbleFxActive(false);
+
+        }
+        else if (other.CompareTag(Tags.Enemy))
+        {
+            Enemy enemy = other.GetComponent<Enemy>();
+
+            enemy.EnemyAttack();
+
+            Die();
 
         }
     }

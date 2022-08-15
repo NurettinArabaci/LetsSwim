@@ -1,23 +1,28 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public class PlayerMovement : Player
 {
 
     public static Vector3 currentPose;
+
+
+
+     protected void Update()
+     {
+         if (isActiveGame)
+         {
+             StartMovement();
+
+             BreathControl();
+
+             currentPose = mT.position;
+         }
+     }
     
-    protected void Update()
-    {
-        if (isActiveGame)
-        {
-            StartMovement();
 
-            BreathControl();
-
-            currentPose = mT.position;
-        }
-    }
 
     protected virtual void StartMovement()
     {
@@ -25,6 +30,8 @@ public class PlayerMovement : Player
         {
             upMovement = false;
             breathing = false;
+
+            Enemy.enemyMove = true;
 
             CamManager.instance.OnStartGame();
 
@@ -34,11 +41,12 @@ public class PlayerMovement : Player
 
             if (isSurface)
             {
-                mT.position += Vector3.down / 4;
+                mT.position += Vector3.forward + Vector3.down / 4;
                 ResetAnim(AnimParam.idle);
                 mAnim.SetTrigger(AnimParam.swim);
                 isSurface = false;
             }
+            mT.DOLookAt(mT.position + Vector3.forward + Vector3.down / 4,0.5f);
 
         }
 
@@ -46,7 +54,8 @@ public class PlayerMovement : Player
         {
 
             mT.position += (Vector3.forward + Vector3.down / 4) * Time.deltaTime * speed;
-            mT.position = new Vector3(0, Mathf.Clamp(mT.position.y, -limitY, limitY), mT.position.z);
+            mT.position = Vector3.up*Mathf.Clamp(mT.position.y, -limitY, limitY)+Vector3.forward*mT.position.z;
+            
 
             DecreaseBreath();
 
@@ -58,12 +67,14 @@ public class PlayerMovement : Player
 
             breathing = true;
 
+            mT.DOLookAt(mT.position + Vector3.forward + Vector3.up / 3,0.5f);
+
         }
 
         if (upMovement)
         {
-            mT.position += (Vector3.forward + Vector3.up / 2) * Time.deltaTime * speed;
-
+            mT.position += (Vector3.forward + Vector3.up / 3) * Time.deltaTime * speed;
+            
 
         }
 
@@ -74,4 +85,10 @@ public class PlayerMovement : Player
 
 
     }
+
+    
+   
+    
+
+
 }

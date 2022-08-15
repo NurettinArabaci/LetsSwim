@@ -17,4 +17,5 @@ public static class AnimParam
     public const string die = "die";
     public const string dive = "dive";
     public const string standUp = "standUp";
+    public const string attack = "attack";
 }
