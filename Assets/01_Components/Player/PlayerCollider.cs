@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using DG.Tweening;
 
 public class PlayerCollider : PlayerMovement
 {
@@ -18,18 +17,18 @@ public class PlayerCollider : PlayerMovement
     {
         if (other.CompareTag(Tags.Water))
         {
+
+            //CheckPosition();
+
             upMovement = false;
-            isSurface = true;
 
-            mAnim.SetTrigger(AnimParam.idle);
-            ResetAnim(AnimParam.swim);
-           
+            //BubbleFxActive(false);
 
-            CheckPosition();
+            //AnimationChanging(AnimParam.swim, AnimParam.idle);
 
-            BubbleFxActive(false);
 
         }
+
         else if (other.CompareTag(Tags.Enemy))
         {
             Enemy enemy = other.GetComponent<Enemy>();
@@ -39,14 +38,24 @@ public class PlayerCollider : PlayerMovement
             Die();
 
         }
-    }
 
+        else if (other.CompareTag("StartPoint"))
+        {
+            BubbleFxActive(false);
+            rb.velocity = rb.velocity.normalized * 10;
+            AnimationChanging(AnimParam.swim, AnimParam.standUp);
+            isActiveGame = false;
+            breathing = true;
+
+        }
+
+        else if (other.CompareTag("EndPoint"))
+        {
+            mAnim.SetTrigger(AnimParam.dive);
+            rb.velocity = rb.velocity.normalized * 7;
+            isActiveGame = true;
+
+        }
+    }
     
-
-    void CheckPosition()
-    {
-        if (mT.position.y > 0)
-            mT.position = mT.position.z * Vector3.forward;
-        
-    }
 }

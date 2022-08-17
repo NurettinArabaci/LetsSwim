@@ -8,23 +8,42 @@ public class PlayerMovement : Player
 
     public static Vector3 currentPose;
 
+    //bool isSwim = false;
+    //bool buttonUp = true;
+
+    private void FixedUpdate()
+    {
+        if (isActiveGame)
+        {
+            Movement();
+
+            currentPose = mT.position;
+        }
 
 
-     protected void Update()
+        BreathControl();
+        if (breathing)
+        {
+            IncreaseBreath();
+        }
+
+    }
+
+    /*protected void Update()
      {
          if (isActiveGame)
          {
-             StartMovement();
+             Movement();
 
              BreathControl();
 
              currentPose = mT.position;
          }
-     }
+     }*/
+
     
-
-
-    protected virtual void StartMovement()
+    
+    protected virtual void Movement()
     {
         if (Input.GetMouseButtonDown(0))
         {
@@ -38,23 +57,22 @@ public class PlayerMovement : Player
             BubbleFxActive(true);
 
 
+            //mT.DOLookAt(mT.position + (Vector3.forward + Vector3.down / 4), 0.3f);
 
-            if (isSurface)
-            {
-                mT.position += Vector3.forward + Vector3.down / 4;
-                ResetAnim(AnimParam.idle);
-                mAnim.SetTrigger(AnimParam.swim);
-                isSurface = false;
-            }
-            mT.DOLookAt(mT.position + Vector3.forward + Vector3.down / 4,0.5f);
+            rb.AddForce(Vector3.forward * 12000*Time.fixedDeltaTime);
 
         }
 
         else if (Input.GetMouseButton(0))
         {
 
-            mT.position += (Vector3.forward + Vector3.down / 4) * Time.deltaTime * speed;
-            mT.position = Vector3.up*Mathf.Clamp(mT.position.y, -limitY, limitY)+Vector3.forward*mT.position.z;
+            AnimationChanging(AnimParam.idle, AnimParam.swim);
+
+            
+
+
+            //mT.position += Vector3.forward * Time.deltaTime * speed;
+            //mT.position = Vector3.up*Mathf.Clamp(mT.position.y, -limitY, limitY)+Vector3.forward*mT.position.z;
             
 
             DecreaseBreath();
@@ -63,32 +81,44 @@ public class PlayerMovement : Player
 
         else if (Input.GetMouseButtonUp(0))
         {
-            upMovement = true;
+            //upMovement = true;
+
+            //rb.AddForce(Vector3.back * 100);
+            rb.velocity = rb.velocity.normalized * 6;
 
             breathing = true;
 
-            mT.DOLookAt(mT.position + Vector3.forward + Vector3.up / 3,0.5f);
+            //mT.DOLookAt(mT.position + (Vector3.forward + Vector3.up / 3), 0.3f);
 
+            
         }
 
+        if (rb.velocity.magnitude > 10)
+        {
+            rb.velocity = rb.velocity.normalized * 10;
+        }
         if (upMovement)
         {
-            mT.position += (Vector3.forward + Vector3.up / 3) * Time.deltaTime * speed;
+            if (mT.position.y <= 0)
+            {
+                mT.position += (Vector3.forward + Vector3.up / 3) * Time.deltaTime * speed;
+            }
+            else
+                CheckPosition();
             
 
+
         }
 
-        if (breathing)
-        {
-            IncreaseBreath();
-        }
+        
+    }
 
+    protected void CheckPosition()
+    {
+        if (mT.position.y > 0)
+            mT.position = mT.position.z * Vector3.forward;
 
     }
 
-    
    
-    
-
-
 }

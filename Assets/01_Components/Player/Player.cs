@@ -10,7 +10,7 @@ public partial class EventManager
     public static void Fire_OnPlayerMove() { OnPlayerMove?.Invoke(); }
 }
 
-public enum DamagePhase
+public enum DamagePhaseType
 {
     None,
     Low,
@@ -40,25 +40,24 @@ public class Player : MonoBehaviour
     public static bool isActiveGame;
     public static bool upMovement;
     public static bool breathing;
-    public static bool isSurface;
 
     public List<ParticleSystem> bubbleFx;
 
     protected virtual void Awake()
     {
         Application.targetFrameRate = 30;
-        mT = transform;
-        mAnim = GetComponentInChildren<Animator>();
 
+        mT = transform;
+
+        mAnim = GetComponentInChildren<Animator>();
         rb = GetComponent<Rigidbody>();
+        mesh = GetComponentInChildren<SkinnedMeshRenderer>();
 
         breath = 100;
 
         isActiveGame = true;
 
-        isSurface = true;
-
-        mesh = GetComponentInChildren<SkinnedMeshRenderer>();
+        
 
     }
 
@@ -70,26 +69,26 @@ public class Player : MonoBehaviour
         }
     }
 
-    protected DamagePhase PhaseEnum()
+    protected DamagePhaseType DamagePhase()
     {
 
         if (breath >= 75)
-            return DamagePhase.None;
+            return DamagePhaseType.None;
 
         if (breath < 75 && breath >= 50)
-            return DamagePhase.Low;
+            return DamagePhaseType.Low;
 
         else if (breath < 50 && breath >= 25)
-            return DamagePhase.Medium;
+            return DamagePhaseType.Medium;
 
         else if (breath < 25 && breath >= 10)
-            return DamagePhase.Hard;
+            return DamagePhaseType.Hard;
 
         else if (breath < 5)
-            return DamagePhase.Die;
+            return DamagePhaseType.Die;
 
         else
-            return DamagePhase.Default;
+            return DamagePhaseType.Default;
 
     }
 
@@ -107,38 +106,38 @@ public class Player : MonoBehaviour
     protected void BreathControl()
     {
 
-        PhaseEnum();
+        DamagePhase();
 
 
-        switch (PhaseEnum())
+        switch (DamagePhase())
         {
-            case DamagePhase.None:
+            case DamagePhaseType.None:
 
                 RedToWhite(0);
 
                 break;
 
-            case DamagePhase.Low:
+            case DamagePhaseType.Low:
 
                 WhiteToRed(0);
                 RedToWhite(1);
 
                 break;
 
-            case DamagePhase.Medium:
+            case DamagePhaseType.Medium:
 
                 WhiteToRed(1);
                 RedToWhite(2);
 
                 break;
 
-            case DamagePhase.Hard:
+            case DamagePhaseType.Hard:
 
                 WhiteToRed(2);
 
                 break;
 
-            case DamagePhase.Die:
+            case DamagePhaseType.Die:
 
                 Die();
 
@@ -152,10 +151,13 @@ public class Player : MonoBehaviour
     }
 
 
-
-    protected void ResetAnim(string anim)
+    protected void AnimationChanging(string endAnim, string startAnim)
     {
-       mAnim.ResetTrigger(anim);
+        if (mAnim.GetCurrentAnimatorStateInfo(0).IsName(endAnim))
+        {
+            mAnim.ResetTrigger(endAnim);
+            mAnim.SetTrigger(startAnim);
+        }
     }
 
 
@@ -189,6 +191,7 @@ public class Player : MonoBehaviour
     {
         isActiveGame = false;
         mAnim.SetTrigger(AnimParam.die);
+        rb.velocity = Vector3.zero;
     }
 
 }

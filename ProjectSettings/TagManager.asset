@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Water
   - Enemy
+  - StartPoint
+  - EndPoint
   layers:
   - Default
   - TransparentFX

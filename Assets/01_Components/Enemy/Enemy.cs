@@ -29,27 +29,29 @@ public class Enemy : MonoBehaviour
     }
 
 
-    private void LateUpdate()
+    private void FixedUpdate()
     {
         if (!enemyMove)
             return;
 
         Movement();
+        
 
     }
 
     void Movement()
     {
-        target = Vector3.MoveTowards(mT.position, PlayerMovement.currentPose +offset , speed * Time.deltaTime);
+        target = Vector3.MoveTowards(mT.position, PlayerMovement.currentPose +offset , speed * Time.fixedDeltaTime);
         rb.MovePosition(target);
-        transform.LookAt(PlayerMovement.currentPose + Vector3.up);
+        mT.LookAt(PlayerMovement.currentPose + Vector3.up);
     }
 
     public void EnemyAttack()
     {
         enemyAnim.SetTrigger(AnimParam.attack);
         enemyMove = false;
-        mT.DOMoveZ(mT.position.z+1.5f, 0.5f);
+        mT.DOMove(new Vector3(0,1.6f, mT.position.z+2f), 1f);
+        mT.DOLookAt(new Vector3(0, 1.6f, mT.position.z + 1.5f), 1f);
 
         StartCoroutine(MoveAfterFeeding());
     }
@@ -66,9 +68,30 @@ public class Enemy : MonoBehaviour
     IEnumerator MoveAfterFeeding()
     {
         yield return new WaitForSeconds(0.5f);
-
-        Vector3 movePose = mT.position + (Vector3.down + Vector3.forward*3) * 10;
-        mT.DOMove(movePose,10);
+        Vector3 movePose = mT.position + (Vector3.down + Vector3.forward * 3) * 10;
         mT.DOLookAt(movePose, 1);
+        yield return new WaitForSeconds(0.2f);
+        
+        mT.DOMove(movePose,10);
+        
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("StartPoint"))
+        {
+            enemyMove = false;
+
+            rb.AddForce((Vector3.forward + Vector3.down / 6)*500);
+
+
+        }
+
+        else if (other.CompareTag("EndPoint"))
+        {
+            enemyMove = true;
+            rb.velocity =Vector3.zero;
+
+        }
     }
 }
