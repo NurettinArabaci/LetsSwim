@@ -56,10 +56,8 @@ public class PlayerMovement : Player
 
             BubbleFxActive(true);
 
-
-            //mT.DOLookAt(mT.position + (Vector3.forward + Vector3.down / 4), 0.3f);
-
-            rb.AddForce(Vector3.forward * 12000*Time.fixedDeltaTime);
+            rb.drag = 0f;
+            rb.AddForce(Vector3.forward * 12000 * Time.fixedDeltaTime);
 
         }
 
@@ -68,14 +66,11 @@ public class PlayerMovement : Player
 
             AnimationChanging(AnimParam.idle, AnimParam.swim);
 
-            
-
-
             //mT.position += Vector3.forward * Time.deltaTime * speed;
             //mT.position = Vector3.up*Mathf.Clamp(mT.position.y, -limitY, limitY)+Vector3.forward*mT.position.z;
-            
 
             DecreaseBreath();
+            print(rb.velocity.magnitude);
 
         }
 
@@ -84,7 +79,8 @@ public class PlayerMovement : Player
             //upMovement = true;
 
             //rb.AddForce(Vector3.back * 100);
-            rb.velocity = rb.velocity.normalized * 6;
+            //rb.velocity = rb.velocity.normalized * 6;
+            rb.drag = 0.5f;
 
             breathing = true;
 
@@ -93,32 +89,17 @@ public class PlayerMovement : Player
             
         }
 
+        
         if (rb.velocity.magnitude > 10)
         {
             rb.velocity = rb.velocity.normalized * 10;
         }
-        if (upMovement)
+        else if (rb.velocity.magnitude > 5)
         {
-            if (mT.position.y <= 0)
-            {
-                mT.position += (Vector3.forward + Vector3.up / 3) * Time.deltaTime * speed;
-            }
-            else
-                CheckPosition();
-            
-
-
+            mAnim.speed = rb.velocity.magnitude / 10;
         }
 
         
     }
-
-    protected void CheckPosition()
-    {
-        if (mT.position.y > 0)
-            mT.position = mT.position.z * Vector3.forward;
-
-    }
-
    
 }

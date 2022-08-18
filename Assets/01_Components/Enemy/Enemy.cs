@@ -11,7 +11,7 @@ public class Enemy : MonoBehaviour
 
     Vector3 offset;
 
-    int speed;
+    float speed;
 
     Rigidbody rb;
 
@@ -44,6 +44,9 @@ public class Enemy : MonoBehaviour
         target = Vector3.MoveTowards(mT.position, PlayerMovement.currentPose +offset , speed * Time.fixedDeltaTime);
         rb.MovePosition(target);
         mT.LookAt(PlayerMovement.currentPose + Vector3.up);
+
+        speed = Vector3.Distance(PlayerMovement.currentPose, mT.position) >= 10 ? 10 : 9;
+
     }
 
     public void EnemyAttack()

@@ -15,21 +15,7 @@ public class PlayerCollider : PlayerMovement
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag(Tags.Water))
-        {
-
-            //CheckPosition();
-
-            upMovement = false;
-
-            //BubbleFxActive(false);
-
-            //AnimationChanging(AnimParam.swim, AnimParam.idle);
-
-
-        }
-
-        else if (other.CompareTag(Tags.Enemy))
+       if (other.CompareTag(Tags.Enemy))
         {
             Enemy enemy = other.GetComponent<Enemy>();
 
@@ -42,8 +28,11 @@ public class PlayerCollider : PlayerMovement
         else if (other.CompareTag("StartPoint"))
         {
             BubbleFxActive(false);
-            rb.velocity = rb.velocity.normalized * 10;
             AnimationChanging(AnimParam.swim, AnimParam.standUp);
+
+            rb.drag = 0f;
+            rb.velocity = rb.velocity.normalized * 10;
+            
             isActiveGame = false;
             breathing = true;
 
@@ -52,7 +41,8 @@ public class PlayerCollider : PlayerMovement
         else if (other.CompareTag("EndPoint"))
         {
             mAnim.SetTrigger(AnimParam.dive);
-            rb.velocity = rb.velocity.normalized * 7;
+
+            rb.drag = 0.2f;
             isActiveGame = true;
 
         }
