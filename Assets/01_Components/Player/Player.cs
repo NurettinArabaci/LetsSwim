@@ -33,6 +33,8 @@ public class Player : MonoBehaviour
 
     public static float breath { get; protected set; }
 
+    public static float colorChangeAmount;
+
     protected float limitY = 10;
 
     protected int speed = 10;
@@ -49,6 +51,8 @@ public class Player : MonoBehaviour
 
         mT = transform;
 
+        colorChangeAmount = 2;
+
         mAnim = GetComponentInChildren<Animator>();
         rb = GetComponent<Rigidbody>();
         mesh = GetComponentInChildren<SkinnedMeshRenderer>();
@@ -57,7 +61,7 @@ public class Player : MonoBehaviour
 
         isActiveGame = true;
 
-        
+
 
     }
 
@@ -65,7 +69,7 @@ public class Player : MonoBehaviour
     {
         foreach (var item in bubbleFx)
         {
-            item.gameObject.SetActive(state);
+            //            item.gameObject.SetActive(state);
         }
     }
 
@@ -84,7 +88,7 @@ public class Player : MonoBehaviour
         else if (breath < 25 && breath >= 10)
             return DamagePhaseType.Hard;
 
-        else if (breath < 5)
+        else if (breath <= 0)
             return DamagePhaseType.Die;
 
         else
@@ -94,13 +98,13 @@ public class Player : MonoBehaviour
 
     void RedToWhite(int index)
     {
-        if (mesh.materials[index].color == Color.red) mesh.materials[index].DOColor(Color.white, 1);
+        //        if (mesh.materials[index].color == Color.red) mesh.materials[index].DOColor(Color.white, 1);
     }
 
 
     void WhiteToRed(int index)
     {
-        if (mesh.materials[index].color == Color.white) mesh.materials[index].DOColor(Color.red, 1);
+        //      if (mesh.materials[index].color == Color.white) mesh.materials[index].DOColor(Color.red, 1);
     }
 
     protected void BreathControl()
@@ -164,34 +168,66 @@ public class Player : MonoBehaviour
 
     public static float Stamina
     {
-        get { return PlayerPrefs.GetFloat("Stamina", 12);}
-        set { PlayerPrefs.SetFloat("Stamina", value);}
+        get { return PlayerPrefs.GetFloat("Stamina", 12); }
+        set { PlayerPrefs.SetFloat("Stamina", value); }
     }
+
 
     protected void DecreaseBreath()
     {
         if (breath > 0)
         {
             breath -= Stamina * Time.deltaTime;
+            colorChangeAmount -= Stamina * Time.deltaTime / 30;
+            ColorLevel();
         }
 
     }
 
     protected void IncreaseBreath()
     {
-        if (breath<100)
+        if (breath < 100)
         {
             breath += Stamina * 0.7f * Time.deltaTime;
-            
+
+            //colorChangeAmount += 0.7f*Stamina * Time.deltaTime / 30;
+
+            //mesh.material.SetFloat("_ProgressBorder", breaths);
+            ColorLevel();
         }
 
     }
 
+
+    void ColorLevel()
+    {
+        if (breath < 90)
+        {
+            mesh.materials[0].color = new Color(1, breath / 90, breath / 90);
+        }
+
+    }
+    /*
+    void ColorLevel()
+    {
+        if (breath>70)
+        {
+            mesh.materials[0].color = new Color(1, colorChangeAmount - 1f, colorChangeAmount - 1f);
+        }
+        if (breath <= 80 && breath > 50)
+        {
+            mesh.materials[1].color = new Color(1, colorChangeAmount-0.5f, colorChangeAmount - 0.5f);
+        }
+        if (breath <= 60 && breath > 30)
+        {
+            mesh.materials[2].color = new Color(1, colorChangeAmount, colorChangeAmount);
+        }
+    }
+    */
     protected void Die()
     {
         isActiveGame = false;
         mAnim.SetTrigger(AnimParam.die);
         rb.velocity = Vector3.zero;
     }
-
 }

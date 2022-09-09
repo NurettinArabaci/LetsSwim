@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class PlayerCollider : PlayerMovement
 {
-    
 
     protected override void Awake()
     {
@@ -15,7 +14,7 @@ public class PlayerCollider : PlayerMovement
 
     private void OnTriggerEnter(Collider other)
     {
-       if (other.CompareTag(Tags.Enemy))
+        if (other.CompareTag(Tags.Enemy))
         {
             Enemy enemy = other.GetComponent<Enemy>();
 
@@ -32,7 +31,7 @@ public class PlayerCollider : PlayerMovement
 
             rb.drag = 0f;
             rb.velocity = rb.velocity.normalized * 10;
-            
+
             isActiveGame = false;
             breathing = true;
 
@@ -47,5 +46,5 @@ public class PlayerCollider : PlayerMovement
 
         }
     }
-    
+
 }
