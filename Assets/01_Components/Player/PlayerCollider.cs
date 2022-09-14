@@ -35,6 +35,8 @@ public class PlayerCollider : PlayerMovement
             isActiveGame = false;
             breathing = true;
 
+            mAnim.speed = rb.velocity.magnitude / 10;
+
         }
 
         else if (other.CompareTag("EndPoint"))

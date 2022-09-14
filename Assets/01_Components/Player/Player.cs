@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using DG.Tweening;
 
 public partial class EventManager
 {
@@ -42,6 +41,7 @@ public class Player : MonoBehaviour
     public static bool isActiveGame;
     public static bool upMovement;
     public static bool breathing;
+    protected bool isDeath;
 
     public List<ParticleSystem> bubbleFx;
 
@@ -59,7 +59,7 @@ public class Player : MonoBehaviour
 
         breath = 100;
 
-        isActiveGame = true;
+        isActiveGame = false;
 
 
 
@@ -69,7 +69,7 @@ public class Player : MonoBehaviour
     {
         foreach (var item in bubbleFx)
         {
-            //            item.gameObject.SetActive(state);
+            item.gameObject.SetActive(state);
         }
     }
 
@@ -109,9 +109,6 @@ public class Player : MonoBehaviour
 
     protected void BreathControl()
     {
-
-        DamagePhase();
-
 
         switch (DamagePhase())
         {
@@ -168,10 +165,34 @@ public class Player : MonoBehaviour
 
     public static float Stamina
     {
-        get { return PlayerPrefs.GetFloat("Stamina", 12); }
+        get { return PlayerPrefs.GetFloat("Stamina", 15); }
         set { PlayerPrefs.SetFloat("Stamina", value); }
     }
 
+    public static int Distance
+    {
+        get { return PlayerPrefs.GetInt("Distance", 0); }
+        set { PlayerPrefs.SetInt("Distance", value); }
+    }
+
+    public static float CoinIncrease
+    {
+        get { return PlayerPrefs.GetFloat("CoinIncrease", 0.5f); }
+        set { PlayerPrefs.SetFloat("CoinIncrease", value); }
+    }
+
+
+    public static float Coin
+    {
+        get { return PlayerPrefs.GetFloat("Coin", 0); }
+        set { PlayerPrefs.SetFloat("Coin",value); }
+    }
+
+    public static float CoinTemp
+    {
+        get { return PlayerPrefs.GetFloat("CoinTemp", 0); }
+        set { PlayerPrefs.SetFloat("CoinTemp", value); }
+    }
 
     protected void DecreaseBreath()
     {
@@ -186,17 +207,16 @@ public class Player : MonoBehaviour
 
     protected void IncreaseBreath()
     {
-        if (breath < 100)
+        if (breath < 90)
         {
-            breath += Stamina * 0.7f * Time.deltaTime;
+            breath += Stamina * 0.5f * Time.deltaTime;
 
-            //colorChangeAmount += 0.7f*Stamina * Time.deltaTime / 30;
-
-            //mesh.material.SetFloat("_ProgressBorder", breaths);
             ColorLevel();
         }
 
     }
+
+
 
 
     void ColorLevel()
@@ -207,27 +227,27 @@ public class Player : MonoBehaviour
         }
 
     }
-    /*
-    void ColorLevel()
-    {
-        if (breath>70)
-        {
-            mesh.materials[0].color = new Color(1, colorChangeAmount - 1f, colorChangeAmount - 1f);
-        }
-        if (breath <= 80 && breath > 50)
-        {
-            mesh.materials[1].color = new Color(1, colorChangeAmount-0.5f, colorChangeAmount - 0.5f);
-        }
-        if (breath <= 60 && breath > 30)
-        {
-            mesh.materials[2].color = new Color(1, colorChangeAmount, colorChangeAmount);
-        }
-    }
-    */
+
     protected void Die()
     {
         isActiveGame = false;
         mAnim.SetTrigger(AnimParam.die);
         rb.velocity = Vector3.zero;
+
+        StartCoroutine(RestartButtonCR());
+
+        Coin += CoinTemp;
+        CoinTemp = 0;
+
+        isDeath = true;
+
+        CamManager.instance.OnFinishGame();
+
+    }
+
+    IEnumerator RestartButtonCR()
+    {
+        yield return new WaitForSeconds(2);
+        UIManager.instance.OpenRestartPanel();
     }
 }

@@ -7,18 +7,31 @@ public class PlayerMovement : Player
 {
 
     public static Vector3 currentPose;
+    Vector3 initPose;
+
+    bool isFinishPressed = true;
+    
+
+    private void Start()
+    {
+        isDeath = false;
+        initPose = mT.position;
+    }
+    //bool move = false;
 
     private void FixedUpdate()
     {
+        if (isDeath) return;
+        
         if (isActiveGame)
         {
             Movement();
-
-            currentPose = mT.position;
         }
 
-
+        currentPose = mT.position;
+        DistanceCalculate();
         BreathControl();
+
         if (breathing)
         {
             IncreaseBreath();
@@ -26,6 +39,17 @@ public class PlayerMovement : Player
 
     }
 
+
+    
+
+    int _distance = 0;
+    void DistanceCalculate()
+    {
+        _distance = (int)Vector3.Distance(currentPose, initPose);
+        CoinTemp = _distance * CoinIncrease;
+
+        UIManager.instance.CoinChange(_distance);
+    }
 
     protected virtual void Movement()
     {
@@ -42,10 +66,13 @@ public class PlayerMovement : Player
 
             rb.drag = 0f;
 
+           // move = true;
+
         }
 
         else if (Input.GetMouseButton(0))
         {
+            if (!isFinishPressed) return;
             if (rb.velocity.magnitude <= 10)
             {
                 rb.AddForce(Vector3.forward * 500 * Time.fixedDeltaTime, ForceMode.Acceleration);
@@ -64,6 +91,8 @@ public class PlayerMovement : Player
 
             breathing = true;
 
+            StartCoroutine(PressControl());
+
         }
 
 
@@ -79,6 +108,13 @@ public class PlayerMovement : Player
             rb.velocity = rb.velocity.normalized * 5;
 
 
+    }
+
+    IEnumerator PressControl()
+    {
+        isFinishPressed = false;
+        yield return new WaitForSeconds(1f);
+        isFinishPressed = true;
     }
 
 }

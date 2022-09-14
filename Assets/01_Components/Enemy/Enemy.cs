@@ -45,7 +45,7 @@ public class Enemy : MonoBehaviour
         rb.MovePosition(target);
         mT.LookAt(PlayerMovement.currentPose + Vector3.up);
 
-        speed = Vector3.Distance(PlayerMovement.currentPose, mT.position) >= 10 ? 10 : 9;
+        speed = Vector3.Distance(PlayerMovement.currentPose, mT.position) >= 10 ? 10 : 9.3f;
 
     }
 

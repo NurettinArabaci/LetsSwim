@@ -19,5 +19,9 @@ public class CamManager : MonoBehaviour
     {
         cam.m_Priority = 9;
     }
+    public void OnFinishGame()
+    {
+        cam.m_Priority = 11;
+    }
 
 }

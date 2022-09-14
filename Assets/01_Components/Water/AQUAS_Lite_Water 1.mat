@@ -109,7 +109,7 @@ Material:
     - _RefractionFalloff: 1
     - _ShoreFade: 0.56
     - _ShoreTransparency: 0.5
-    - _Specular: 1
+    - _Specular: 0.15
     - _SrcBlend: 1
     - _TransparencyFade: 1
     - _UVSec: 0
