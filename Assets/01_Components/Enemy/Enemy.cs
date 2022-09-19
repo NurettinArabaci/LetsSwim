@@ -45,7 +45,7 @@ public class Enemy : MonoBehaviour
         rb.MovePosition(target);
         mT.LookAt(PlayerMovement.currentPose + Vector3.up);
 
-        speed = Vector3.Distance(PlayerMovement.currentPose, mT.position) >= 10 ? 10 : 9.3f;
+        speed = Vector3.Distance(PlayerMovement.currentPose, mT.position) >= 9 ? 10 : 9.3f;
 
     }
 
@@ -71,11 +71,11 @@ public class Enemy : MonoBehaviour
     IEnumerator MoveAfterFeeding()
     {
         yield return new WaitForSeconds(0.5f);
-        Vector3 movePose = mT.position + (Vector3.down + Vector3.forward * 3) * 10;
+        Vector3 movePose = mT.position + (Vector3.down + Vector3.forward * 5) * 4;
         mT.DOLookAt(movePose, 1);
         yield return new WaitForSeconds(0.2f);
         
-        mT.DOMove(movePose,10);
+        mT.DOMove(movePose,2);
         
     }
 

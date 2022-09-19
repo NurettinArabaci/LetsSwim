@@ -20,33 +20,44 @@ public class PlayerCollider : PlayerMovement
 
             enemy.EnemyAttack();
 
-            Die();
+            breath = 0;
 
         }
 
         else if (other.CompareTag("StartPoint"))
         {
-            BubbleFxActive(false);
-            AnimationChanging(AnimParam.swim, AnimParam.standUp);
-
-            rb.drag = 0f;
-            rb.velocity = rb.velocity.normalized * 10;
-
-            isActiveGame = false;
-            breathing = true;
-
-            mAnim.speed = rb.velocity.magnitude / 10;
+            EnterRestRoad();
 
         }
 
         else if (other.CompareTag("EndPoint"))
         {
-            mAnim.SetTrigger(AnimParam.dive);
-
-            rb.drag = 0.2f;
-            isActiveGame = true;
+            ExitRestRoad();
 
         }
+    }
+
+
+    void EnterRestRoad()
+    {
+        BubbleFxActive(false);
+        AnimationChanging(AnimParam.swim, AnimParam.standUp);
+
+        rb.drag = 0f;
+        rb.velocity = rb.velocity.normalized * 10;
+
+        isActiveGame = false;
+        breathing = true;
+
+        mAnim.speed = rb.velocity.magnitude / 10;
+    }
+
+    void ExitRestRoad()
+    {
+        mAnim.SetTrigger(AnimParam.dive);
+
+        rb.drag = 0.2f;
+        isActiveGame = true;
     }
 
 }

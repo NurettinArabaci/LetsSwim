@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using DG.Tweening;
 
 public class PlayerMovement : Player
 {
@@ -11,17 +10,19 @@ public class PlayerMovement : Player
 
     bool isFinishPressed = true;
     
+    
 
     private void Start()
     {
-        isDeath = false;
         initPose = mT.position;
+        Distance = 0;
     }
-    //bool move = false;
 
     private void FixedUpdate()
     {
-        if (isDeath) return;
+        if (isFinish) return;
+        
+        if (isDeath()) return;
         
         if (isActiveGame)
         {
@@ -30,7 +31,7 @@ public class PlayerMovement : Player
 
         currentPose = mT.position;
         DistanceCalculate();
-        BreathControl();
+        
 
         if (breathing)
         {
@@ -42,13 +43,13 @@ public class PlayerMovement : Player
 
     
 
-    int _distance = 0;
+    
     void DistanceCalculate()
     {
-        _distance = (int)Vector3.Distance(currentPose, initPose);
-        CoinTemp = _distance * CoinIncrease;
+        Distance = (int)Vector3.Distance(currentPose, initPose);
+        CoinTemp = Distance * CoinIncrease;
 
-        UIManager.instance.CoinChange(_distance);
+        UIManager.instance.CoinChange(Distance);
     }
 
     protected virtual void Movement()
@@ -65,8 +66,6 @@ public class PlayerMovement : Player
             BubbleFxActive(true);
 
             rb.drag = 0f;
-
-           // move = true;
 
         }
 

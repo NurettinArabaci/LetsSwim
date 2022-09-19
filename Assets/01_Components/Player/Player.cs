@@ -9,17 +9,6 @@ public partial class EventManager
     public static void Fire_OnPlayerMove() { OnPlayerMove?.Invoke(); }
 }
 
-public enum DamagePhaseType
-{
-    None,
-    Low,
-    Medium,
-    Hard,
-    Die,
-    Default
-
-}
-
 
 public class Player : MonoBehaviour
 {
@@ -32,8 +21,6 @@ public class Player : MonoBehaviour
 
     public static float breath { get; protected set; }
 
-    public static float colorChangeAmount;
-
     protected float limitY = 10;
 
     protected int speed = 10;
@@ -41,7 +28,17 @@ public class Player : MonoBehaviour
     public static bool isActiveGame;
     public static bool upMovement;
     public static bool breathing;
-    protected bool isDeath;
+    protected bool isFinish = false;
+
+    protected bool isDeath()
+    {
+        if (breath <= 0) { 
+            Die();
+            isFinish = true;
+            return true;}
+        else
+            return false;
+    }
 
     public List<ParticleSystem> bubbleFx;
 
@@ -50,8 +47,6 @@ public class Player : MonoBehaviour
         Application.targetFrameRate = 30;
 
         mT = transform;
-
-        colorChangeAmount = 2;
 
         mAnim = GetComponentInChildren<Animator>();
         rb = GetComponent<Rigidbody>();
@@ -73,84 +68,7 @@ public class Player : MonoBehaviour
         }
     }
 
-    protected DamagePhaseType DamagePhase()
-    {
-
-        if (breath >= 75)
-            return DamagePhaseType.None;
-
-        if (breath < 75 && breath >= 50)
-            return DamagePhaseType.Low;
-
-        else if (breath < 50 && breath >= 25)
-            return DamagePhaseType.Medium;
-
-        else if (breath < 25 && breath >= 10)
-            return DamagePhaseType.Hard;
-
-        else if (breath <= 0)
-            return DamagePhaseType.Die;
-
-        else
-            return DamagePhaseType.Default;
-
-    }
-
-    void RedToWhite(int index)
-    {
-        //        if (mesh.materials[index].color == Color.red) mesh.materials[index].DOColor(Color.white, 1);
-    }
-
-
-    void WhiteToRed(int index)
-    {
-        //      if (mesh.materials[index].color == Color.white) mesh.materials[index].DOColor(Color.red, 1);
-    }
-
-    protected void BreathControl()
-    {
-
-        switch (DamagePhase())
-        {
-            case DamagePhaseType.None:
-
-                RedToWhite(0);
-
-                break;
-
-            case DamagePhaseType.Low:
-
-                WhiteToRed(0);
-                RedToWhite(1);
-
-                break;
-
-            case DamagePhaseType.Medium:
-
-                WhiteToRed(1);
-                RedToWhite(2);
-
-                break;
-
-            case DamagePhaseType.Hard:
-
-                WhiteToRed(2);
-
-                break;
-
-            case DamagePhaseType.Die:
-
-                Die();
-
-                break;
-
-            default:
-
-                break;
-        }
-
-    }
-
+    
 
     protected void AnimationChanging(string endAnim, string startAnim)
     {
@@ -165,7 +83,7 @@ public class Player : MonoBehaviour
 
     public static float Stamina
     {
-        get { return PlayerPrefs.GetFloat("Stamina", 15); }
+        get { return PlayerPrefs.GetFloat("Stamina", 25); }
         set { PlayerPrefs.SetFloat("Stamina", value); }
     }
 
@@ -182,10 +100,10 @@ public class Player : MonoBehaviour
     }
 
 
-    public static float Coin
+    public static float Wallet
     {
-        get { return PlayerPrefs.GetFloat("Coin", 0); }
-        set { PlayerPrefs.SetFloat("Coin",value); }
+        get { return PlayerPrefs.GetFloat("Wallet", 0); }
+        set { PlayerPrefs.SetFloat("Wallet", value); }
     }
 
     public static float CoinTemp
@@ -199,7 +117,7 @@ public class Player : MonoBehaviour
         if (breath > 0)
         {
             breath -= Stamina * Time.deltaTime;
-            colorChangeAmount -= Stamina * Time.deltaTime / 30;
+           
             ColorLevel();
         }
 
@@ -236,18 +154,18 @@ public class Player : MonoBehaviour
 
         StartCoroutine(RestartButtonCR());
 
-        Coin += CoinTemp;
+        Wallet += CoinTemp;
         CoinTemp = 0;
 
-        isDeath = true;
-
         CamManager.instance.OnFinishGame();
+
+        ScoreManager.ScoreUpdate();
 
     }
 
     IEnumerator RestartButtonCR()
     {
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(2.3f);
         UIManager.instance.OpenRestartPanel();
     }
 }

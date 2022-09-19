@@ -1,0 +1,33 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class ScoreManager : MonoBehaviour
+{
+    
+
+    public static int Score
+    {
+        get { return PlayerPrefs.GetInt("Score", 0); }
+        set { PlayerPrefs.SetInt("Score", value); }
+    }
+
+    public static int HighScore
+    {
+        get { return PlayerPrefs.GetInt("HighScore", 0); }
+        set { PlayerPrefs.SetInt("HighScore", value); }
+    }
+
+    public static void ScoreUpdate()
+    {
+        Score = Player.Distance;
+
+        if (Score>HighScore)
+        {
+            HighScore = Score;
+        }
+
+        print("Score: " + Score);
+        print("High Score: " + HighScore);
+    }
+}

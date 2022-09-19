@@ -4,6 +4,7 @@ using UnityEngine;
 using TMPro;
 using DG.Tweening;
 using UnityEngine.SceneManagement;
+using System;
 
 public class UIManager : MonoBehaviour
 {
@@ -18,7 +19,7 @@ public class UIManager : MonoBehaviour
     private void Awake()
     {
         instance = this;
-        failedPanel.transform.localScale=Vector3.zero;
+        
         CoinChange(0);
 
     }
@@ -38,12 +39,15 @@ public class UIManager : MonoBehaviour
     {
         coin.transform.parent.gameObject.SetActive(false);
         failedPanel.SetActive(true);
+        failedPanel.transform.localScale = Vector3.zero;
         failedPanel.transform.DOScale(1, 0.3f);
     }
 
     public void CoinChange(int distance)
     {
-        coin.text = (Player.Coin+Player.CoinTemp).ToString();
+        double x = Player.Wallet + Player.CoinTemp;
+        coin.text = String.Format("{0:0.0}", Math.Round(x, 1));
+
         distanceAmount.text = distance.ToString();
 
     }
