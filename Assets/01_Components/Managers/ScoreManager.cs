@@ -20,14 +20,19 @@ public class ScoreManager : MonoBehaviour
 
     public static void ScoreUpdate()
     {
+        UIManager uiManager = UIManager.instance;
         Score = Player.Distance;
 
         if (Score>HighScore)
         {
             HighScore = Score;
-        }
+            uiManager.newHighScoreText.SetActive(true);
+            
+        }else
+            uiManager.newHighScoreText.SetActive(false);
 
-        print("Score: " + Score);
-        print("High Score: " + HighScore);
+        uiManager.scoreAmount.text = Score.ToString();
+        uiManager.highScoreAmount.text = HighScore.ToString();
+
     }
 }

@@ -46,6 +46,8 @@ public class Player : MonoBehaviour
     {
         Application.targetFrameRate = 30;
 
+        CoinTemp = 0;
+
         mT = transform;
 
         mAnim = GetComponentInChildren<Animator>();
@@ -55,8 +57,6 @@ public class Player : MonoBehaviour
         breath = 100;
 
         isActiveGame = false;
-
-
 
     }
 

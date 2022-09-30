@@ -7,6 +7,7 @@ public class PlayerMovement : Player
 
     public static Vector3 currentPose;
     Vector3 initPose;
+    [SerializeField] Transform earnCoinSpawnTransform;
 
     bool isFinishPressed = true;
     
@@ -41,15 +42,29 @@ public class PlayerMovement : Player
     }
 
 
-    
 
-    
+
+    int tempDistance = 0;
+    int multiplyDistance = 0;
     void DistanceCalculate()
     {
+        
         Distance = (int)Vector3.Distance(currentPose, initPose);
         CoinTemp = Distance * CoinIncrease;
 
-        UIManager.instance.CoinChange(Distance);
+        if (tempDistance != Distance)
+        {
+            if (Distance%3==0 && Distance>9 && multiplyDistance!=Distance)
+            {
+                SpawnManager.instance.SpawnEarnCoin(earnCoinSpawnTransform.position);
+                multiplyDistance = Distance;
+            }
+            
+            tempDistance = Distance;
+            UIManager.instance.CoinChange(Distance);
+        }
+
+        
     }
 
     protected virtual void Movement()

@@ -13,8 +13,12 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject startPanel;
     [SerializeField] public GameObject failedPanel;
     [SerializeField] public GameObject upgradePanel;
-    [SerializeField] TextMeshProUGUI coin;
+    [SerializeField] public TextMeshProUGUI coin;
     [SerializeField] TextMeshProUGUI distanceAmount;
+
+    [SerializeField] public TextMeshProUGUI scoreAmount;
+    [SerializeField] public TextMeshProUGUI highScoreAmount;
+    [SerializeField] public GameObject newHighScoreText;
 
     private void Awake()
     {
@@ -37,6 +41,8 @@ public class UIManager : MonoBehaviour
 
     public void OpenRestartPanel()
     {
+
+
         coin.transform.parent.gameObject.SetActive(false);
         failedPanel.SetActive(true);
         failedPanel.transform.localScale = Vector3.zero;
@@ -47,8 +53,15 @@ public class UIManager : MonoBehaviour
     {
         double x = Player.Wallet + Player.CoinTemp;
         coin.text = String.Format("{0:0.0}", Math.Round(x, 1));
-
+      
         distanceAmount.text = distance.ToString();
 
     }
+
+    void DestroyPanel()
+    {
+        Debug.Log("Destroy Panel");
+        Destroy(failedPanel.gameObject);
+    }
+
 }

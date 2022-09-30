@@ -1,5 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -33,6 +32,7 @@ public class Upgrade : UpgradeManager
     {
         priceText.text = _priceText;
         upgradeLevelText.text = _upgradeLevelText;
+        UIManager.instance.coin.text = String.Format("{0:0.0}", Math.Round(Player.Wallet, 1));
     }
 
     public void StaminaUpgrade()

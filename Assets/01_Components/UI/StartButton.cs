@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+
 public class StartButton : MonoBehaviour
 {
     Button button;
@@ -10,9 +11,10 @@ public class StartButton : MonoBehaviour
     private void Awake()
     {
         button=GetComponent<Button>();
-
         button.onClick.AddListener(StartButtonRun);
     }
+
+
 
     public void StartButtonRun()
     {
