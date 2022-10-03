@@ -151,7 +151,6 @@ public class Player : MonoBehaviour
         isActiveGame = false;
         mAnim.SetTrigger(AnimParam.die);
         rb.velocity = Vector3.zero;
-
         StartCoroutine(RestartButtonCR());
 
         Wallet += CoinTemp;
@@ -167,5 +166,8 @@ public class Player : MonoBehaviour
     {
         yield return new WaitForSeconds(2.3f);
         UIManager.instance.OpenRestartPanel();
+        
     }
+
+    
 }

@@ -27,12 +27,15 @@ public class ScoreManager : MonoBehaviour
         {
             HighScore = Score;
             uiManager.newHighScoreText.SetActive(true);
+            EventManager.Fire_OnConfettiPlay(2.3f);
             
-        }else
+        }
+        else
             uiManager.newHighScoreText.SetActive(false);
 
         uiManager.scoreAmount.text = Score.ToString();
         uiManager.highScoreAmount.text = HighScore.ToString();
 
     }
+
 }
