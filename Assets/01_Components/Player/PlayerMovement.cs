@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class PlayerMovement : Player
 {
-
-    public static Vector3 currentPose;
     Vector3 initPose;
     [SerializeField] Transform earnCoinSpawnTransform;
 
@@ -30,7 +28,6 @@ public class PlayerMovement : Player
             Movement();
         }
 
-        currentPose = mT.position;
         DistanceCalculate();
         
 
@@ -49,7 +46,7 @@ public class PlayerMovement : Player
     void DistanceCalculate()
     {
         
-        Distance = (int)Vector3.Distance(currentPose, initPose);
+        Distance = (int)Vector3.Distance(mT.position, initPose);
         CoinTemp = Distance * CoinIncrease;
 
         if (tempDistance != Distance)

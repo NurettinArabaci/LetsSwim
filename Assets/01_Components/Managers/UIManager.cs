@@ -18,6 +18,7 @@ public class UIManager : MonoBehaviour
 
     [SerializeField] public TextMeshProUGUI scoreAmount;
     [SerializeField] public TextMeshProUGUI highScoreAmount;
+    [SerializeField] public TextMeshProUGUI bestScoreText;
     [SerializeField] public GameObject newHighScoreText;
 
     private void Awake()
@@ -32,6 +33,7 @@ public class UIManager : MonoBehaviour
     {
         startPanel.SetActive(true);
         failedPanel.SetActive(false);
+        
     }
 
     public void Restart()
@@ -55,6 +57,7 @@ public class UIManager : MonoBehaviour
         coin.text = String.Format("{0:0.0}", Math.Round(x, 1));
       
         distanceAmount.text = distance.ToString();
+        bestScoreText.text = ScoreManager.HighScore.ToString() + " m";
 
     }
 
