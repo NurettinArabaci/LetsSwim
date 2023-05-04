@@ -5,28 +5,37 @@ using DG.Tweening;
 
 public class Enemy : MonoBehaviour
 {
-    Transform mT;
-
-    Vector3 target;
+    #region SerializeFields
     [SerializeField] Transform followObj;
+    [SerializeField] Transform getParent;
+    #endregion
 
-    Vector3 offset;
+    #region Private Fields
+    private Transform mT;
 
-    float speed;
+    private Vector3 target;
+    
+    private Vector3 offset;
 
-    Rigidbody rb;
+    private Rigidbody rb;
 
-    public static bool enemyMove;
+    private Animator anim;
 
-    Animator enemyAnim;
+    private float Speed
+    {
+        get=> Vector3.Distance(followObj.position, mT.position) >= 9 ? 10 : 9.3f;
+    }
+    #endregion
+
+    private bool enemyMove;
+
+    
 
     private void Awake()
     {
         References();
 
-        speed = 9;
-
-        //enemyMove = false;
+        EventManager.OnPlayerMove += () => enemyMove = true;
 
         offset = Vector3.back*2+Vector3.up;
     }
@@ -44,20 +53,28 @@ public class Enemy : MonoBehaviour
 
     void Movement()
     {
-        target = Vector3.MoveTowards(mT.position, followObj.position + offset , speed * Time.fixedDeltaTime);
+        target = Vector3.MoveTowards(mT.position, followObj.position + offset , Speed * Time.fixedDeltaTime);
         rb.MovePosition(target);
         mT.LookAt(followObj.position + Vector3.up);
 
-        speed = Vector3.Distance(followObj.position, mT.position) >= 9 ? 10 : 9.3f;
 
+    }
+
+    public async void PlayerGetParent(Transform player)
+    {
+        await System.Threading.Tasks.Task.Delay(150);
+        player.parent = getParent;
     }
 
     public void EnemyAttack()
     {
-        enemyAnim.SetTrigger(AnimParam.attack);
+        anim.SetTrigger(AnimParam.attack);
         enemyMove = false;
-        mT.DOMove(new Vector3(0, 1.6f, mT.position.z + 2f), 1f);
-        mT.DOLookAt(new Vector3(0, 1.6f, mT.position.z + 1.5f), 1f);
+
+        GetComponent<Collider>().enabled = false;
+
+        mT.DOMove(new Vector3(0, 2f, mT.position.z + 3.5f), 1f);
+        mT.DOLookAt(new Vector3(0, 2f, mT.position.z + 3f), 1f);
 
         StartCoroutine(MoveAfterFeeding());
     }
@@ -68,13 +85,14 @@ public class Enemy : MonoBehaviour
 
         rb = GetComponent<Rigidbody>();
 
-        enemyAnim = GetComponentInChildren<Animator>();
+        anim = GetComponentInChildren<Animator>();
     }
 
     IEnumerator MoveAfterFeeding()
     {
+        EventManager.Fire_OnPlayVfxOneShot(VfxType.GameEnd);
         yield return new WaitForSeconds(0.5f);
-        Vector3 movePose = mT.position + (Vector3.down + Vector3.forward * 5) * 4;
+        Vector3 movePose = mT.position + (Vector3.down + Vector3.forward * 5) * 5;
         mT.DOLookAt(movePose, 1);
         yield return new WaitForSeconds(0.2f);
 
@@ -84,7 +102,7 @@ public class Enemy : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("StartPoint"))
+       if (other.CompareTag("StartPoint"))
         {
             enemyMove = false;
 
@@ -93,13 +111,16 @@ public class Enemy : MonoBehaviour
 
         }
 
-        else if (other.CompareTag("EndPoint"))
+        if (other.CompareTag("EndPoint"))
         {
             StartCoroutine(DelayMove());
 
         }
     }
-
+    private void OnDisable()
+    {
+        EventManager.OnPlayerMove -= () => enemyMove = true;
+    }
     IEnumerator DelayMove()
     {
         yield return new WaitForSeconds(0.6f);

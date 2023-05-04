@@ -8,14 +8,23 @@ public class PlayerMovement : Player
     [SerializeField] Transform earnCoinSpawnTransform;
 
     bool isFinishPressed = true;
-    
-    
 
     private void Start()
     {
         initPose = mT.position;
         Distance = 0;
+        EventManager.OnPlayerMove += OnMove;
     }
+
+    void OnMove()
+    {
+        GetComponent<Rigidbody>().AddForce(Vector3.forward * 500 * Time.fixedDeltaTime, ForceMode.Acceleration);
+        AnimationChanging(AnimParam.idle, AnimParam.swim);
+
+        rb.drag = 0f;
+    }
+
+
 
     private void FixedUpdate()
     {
@@ -46,6 +55,7 @@ public class PlayerMovement : Player
     void DistanceCalculate()
     {
         
+
         Distance = (int)Vector3.Distance(mT.position, initPose);
         CoinTemp = Distance * CoinIncrease;
 
@@ -71,9 +81,7 @@ public class PlayerMovement : Player
             upMovement = false;
             breathing = false;
 
-            Enemy.enemyMove = true;
-
-            CamManager.instance.OnStartGame();
+            
 
             BubbleFxActive(true);
 
@@ -126,6 +134,11 @@ public class PlayerMovement : Player
         isFinishPressed = false;
         yield return new WaitForSeconds(1f);
         isFinishPressed = true;
+    }
+
+    private void OnDisable()
+    {
+        EventManager.OnPlayerMove -= OnMove;
     }
 
 }

@@ -20,6 +20,8 @@ public class StartButton : MonoBehaviour
     {
         Player.isActiveGame = true;
 
+        EventManager.Fire_OnPlayerMove();
+
         //UIManager.instance.upgradePanel.SetActive(false);
         transform.parent.gameObject.SetActive(false);
     }

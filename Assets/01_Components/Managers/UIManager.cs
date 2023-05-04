@@ -43,8 +43,6 @@ public class UIManager : MonoBehaviour
 
     public void OpenRestartPanel()
     {
-
-
         coin.transform.parent.gameObject.SetActive(false);
         failedPanel.SetActive(true);
         failedPanel.transform.localScale = Vector3.zero;
@@ -60,11 +58,6 @@ public class UIManager : MonoBehaviour
         bestScoreText.text = ScoreManager.HighScore.ToString() + " m";
 
     }
-
-    void DestroyPanel()
-    {
-        Debug.Log("Destroy Panel");
-        Destroy(failedPanel.gameObject);
-    }
+  
 
 }

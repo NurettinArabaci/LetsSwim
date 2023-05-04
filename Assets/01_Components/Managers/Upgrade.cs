@@ -17,14 +17,18 @@ public class Upgrade : UpgradeManager
         button = GetComponentInChildren<Button>();
         if (upgradeType==UpgradeType.Stamina)
         {
-            UpdateTexts(StaminaPrice.ToString() + "$", "lv " + StaminaLevel.ToString());
+            UpdateTexts(StaminaPrice.ToString() + "$", "lvl " + StaminaLevel.ToString());
             button.onClick.AddListener(StaminaUpgrade);
+            if (Player.Wallet < StaminaPrice) button.interactable = false;
         }
-        else if (upgradeType == UpgradeType.Income)
+        if (upgradeType == UpgradeType.Income)
         {
-            UpdateTexts(IncomePrice.ToString() + "$", "lv " + IncomeLevel.ToString());
+            UpdateTexts(IncomePrice.ToString() + "$", "lvl " + IncomeLevel.ToString());
             button.onClick.AddListener(IncomeUpgrade);
+            if (Player.Wallet < IncomePrice) button.interactable = false;
         }
+
+
     }
 
 
@@ -42,11 +46,19 @@ public class Upgrade : UpgradeManager
             Player.Stamina *= 0.9f;
             StaminaPrice = (int)(StaminaPrice * 1.5f);
             StaminaLevel++;
-            UpdateTexts(StaminaPrice.ToString() + "$", "lv "+StaminaLevel.ToString());
+            UpdateTexts(StaminaPrice.ToString() + "$", "lvl "+StaminaLevel.ToString());
+
+            EventManager.Fire_OnPlayVfxOneShot(VfxType.Upgrade);
+
+            if (!EnoughMoney(StaminaPrice)) button.interactable = false;
         }
         else
-            print("open adds or not enough money");
-
+        {
+            button.interactable = false;
+            print(" open adds or not enough money");
+        }
+            
+       
     }
 
     public void IncomeUpgrade()
@@ -56,10 +68,16 @@ public class Upgrade : UpgradeManager
             Player.CoinIncrease += 0.1f;
             IncomePrice = (int)(IncomePrice * 1.8f);
             IncomeLevel++;
-            UpdateTexts(IncomePrice.ToString() + "$", "lv "+IncomeLevel.ToString());
+            UpdateTexts(IncomePrice.ToString() + "$", "lvl "+IncomeLevel.ToString());
+
+            EventManager.Fire_OnPlayVfxOneShot(VfxType.Upgrade);
+
+            if (!EnoughMoney(IncomePrice)) button.interactable = false;
         }
         else
-            print("open adds or not enough money");
-
+        {
+            button.interactable = false;
+            print(" open adds or not enough money");
+        }
     }
 }

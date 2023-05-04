@@ -6,22 +6,33 @@ using Cinemachine;
 
 public class CamManager : MonoBehaviour
 {
-    [SerializeField] CinemachineVirtualCamera cam;
+    [SerializeField] CinemachineVirtualCamera beginCam;
+    [SerializeField] CinemachineVirtualCamera playCam;
 
     public static CamManager instance;
 
     private void Awake()
     {
         instance=this;
+
+        EventManager.OnPlayerMove += OnStartGame;
     }
 
     public void OnStartGame()
     {
-        cam.m_Priority = 9;
+        beginCam.m_Priority = 9;
+        
     }
     public void OnFinishGame()
     {
-        cam.m_Priority = 11;
+        //playCam.Follow = null;
+        beginCam.m_Priority = 11;
     }
+
+    private void OnDisable()
+    {
+        EventManager.OnPlayerMove -= OnStartGame;
+    }
+
 
 }

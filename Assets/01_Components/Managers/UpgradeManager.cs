@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class UpgradeManager : MonoBehaviour
 {
-    
+
     public static int StaminaPrice
     {
         get { return PlayerPrefs.GetInt("StaminaPrice", 20); }
@@ -33,10 +33,9 @@ public class UpgradeManager : MonoBehaviour
     {
         if (Player.Wallet > price)
         {
-            Player.Wallet -= price;
             return true;
         }
-        else
-            return false;
+
+        return false;
     }
 }

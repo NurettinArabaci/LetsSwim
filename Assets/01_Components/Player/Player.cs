@@ -19,7 +19,7 @@ public class Player : MonoBehaviour
 
     protected SkinnedMeshRenderer mesh;
 
-    public static float breath { get; protected set; }
+    public float breath;
 
     protected float limitY = 10;
 
@@ -32,12 +32,14 @@ public class Player : MonoBehaviour
 
     protected bool isDeath()
     {
-        if (breath <= 0) { 
+        if (breath <= 0)
+        { 
             Die();
             isFinish = true;
-            return true;}
-        else
-            return false;
+            return true;
+        }
+
+        return false;
     }
 
     public List<ParticleSystem> bubbleFx;
@@ -57,6 +59,8 @@ public class Player : MonoBehaviour
         breath = 100;
 
         isActiveGame = false;
+
+        
 
     }
 
@@ -78,8 +82,6 @@ public class Player : MonoBehaviour
             mAnim.SetTrigger(startAnim);
         }
     }
-
-
 
     public static float Stamina
     {

@@ -9,28 +9,28 @@ public class PlayerCollider : PlayerMovement
     {
         base.Awake();
 
+        
+
         BubbleFxActive(false);
     }
-
+    
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag(Tags.Enemy))
+        if (other.TryGetComponent(out Enemy enemy))
         {
-            Enemy enemy = other.GetComponent<Enemy>();
-
             enemy.EnemyAttack();
-
+            enemy.PlayerGetParent(mesh.transform.parent);
             breath = 0;
 
         }
 
-        else if (other.CompareTag("StartPoint"))
+        if (other.CompareTag("StartPoint"))
         {
             EnterRestRoad();
 
         }
 
-        else if (other.CompareTag("EndPoint"))
+        if (other.CompareTag("EndPoint"))
         {
             ExitRestRoad();
 
@@ -59,5 +59,5 @@ public class PlayerCollider : PlayerMovement
         rb.drag = 0.2f;
         isActiveGame = true;
     }
-
+   
 }
