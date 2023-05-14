@@ -24,6 +24,16 @@ public class PlayerCollider : PlayerMovement
 
         }
 
+        // ************** silinecek  >>>>>>>
+        if (other.TryGetComponent(out EnemyTest enemytest))
+        {
+            enemytest.EnemyAttack();
+            enemytest.PlayerGetParent(mesh.transform.parent);
+            breath = 0;
+
+        }
+        //************************   <<<<<<<
+
         if (other.CompareTag("StartPoint"))
         {
             EnterRestRoad();
