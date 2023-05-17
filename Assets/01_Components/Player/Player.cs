@@ -17,6 +17,8 @@ public class Player : MonoBehaviour
     protected Animator mAnim;
     protected Rigidbody rb;
 
+    [SerializeField] protected Animator lowHpAnim;
+
     protected SkinnedMeshRenderer mesh;
 
     public float breath;
@@ -144,6 +146,7 @@ public class Player : MonoBehaviour
         if (breath < 90)
         {
             mesh.materials[0].color = new Color(1, breath / 90, breath / 90);
+
         }
 
     }
@@ -157,6 +160,8 @@ public class Player : MonoBehaviour
 
         Wallet += CoinTemp;
         CoinTemp = 0;
+
+        lowHpAnim.SetFloat("LowHpValue", 1);
 
         CamManager.instance.OnFinishGame();
 

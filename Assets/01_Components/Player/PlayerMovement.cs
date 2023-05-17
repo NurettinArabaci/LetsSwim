@@ -31,6 +31,8 @@ public class PlayerMovement : Player
         if (isFinish) return;
         
         if (isDeath()) return;
+
+        lowHpAnim.SetFloat("LowHpValue", breath / 100);
         
         if (isActiveGame)
         {
