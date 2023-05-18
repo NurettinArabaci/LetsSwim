@@ -4,10 +4,12 @@ using TMPro;
 
 public class EarnCoinPerMeter : MonoBehaviour
 {
-    TextMeshPro textMeshPro;
+    TextMeshProUGUI _text;
+    string coinAmount;
     private void Awake()
     {
-        textMeshPro = GetComponent<TextMeshPro>();
-        textMeshPro.text = "+" + String.Format("{0:0.0}", Math.Round(Player.CoinIncrease, 1))  + "$";
+        coinAmount = String.Format("{0:0.0}", Math.Round(Player.CoinIncrease, 1));
+        _text = GetComponent<TextMeshProUGUI>();
+        _text.SetText($"+ {coinAmount}$");
     }
 }

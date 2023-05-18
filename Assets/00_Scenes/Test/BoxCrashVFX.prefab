@@ -9541,7 +9541,7 @@ GameObject:
   - component: {fileID: 9082473265838249542}
   - component: {fileID: 9082473265838249543}
   m_Layer: 0
-  m_Name: BloodExplosion (3)
+  m_Name: BoxCrashVFX
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

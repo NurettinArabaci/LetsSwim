@@ -5,7 +5,6 @@ using UnityEngine;
 public class PlayerMovement : Player
 {
     Vector3 initPose;
-    [SerializeField] Transform earnCoinSpawnTransform;
 
     bool isFinishPressed = true;
 
@@ -38,7 +37,7 @@ public class PlayerMovement : Player
         {
             Movement();
         }
-
+        
         DistanceCalculate();
         
 
@@ -48,6 +47,8 @@ public class PlayerMovement : Player
         }
 
     }
+
+    
 
 
 
@@ -63,12 +64,14 @@ public class PlayerMovement : Player
 
         if (tempDistance != Distance)
         {
-            if (Distance%3==0 && Distance>9 && multiplyDistance!=Distance)
+            if (Distance % 3 == 0 && Distance > 3 && multiplyDistance != Distance)
             {
-                SpawnManager.instance.SpawnEarnCoin(earnCoinSpawnTransform.position);
+                CoinSpawner.Instance.SpawnEarnCoin();
                 multiplyDistance = Distance;
+
             }
             
+
             tempDistance = Distance;
             UIManager.instance.CoinChange(Distance);
         }
@@ -134,7 +137,7 @@ public class PlayerMovement : Player
     IEnumerator PressControl()
     {
         isFinishPressed = false;
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.5f);
         isFinishPressed = true;
     }
 

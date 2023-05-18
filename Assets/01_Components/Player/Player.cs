@@ -14,9 +14,10 @@ public class Player : MonoBehaviour
 {
 
     protected Transform mT;
-    protected Animator mAnim;
+    
     protected Rigidbody rb;
 
+    [SerializeField] protected Animator mAnim;
     [SerializeField] protected Animator lowHpAnim;
 
     protected SkinnedMeshRenderer mesh;
@@ -54,7 +55,6 @@ public class Player : MonoBehaviour
 
         mT = transform;
 
-        mAnim = GetComponentInChildren<Animator>();
         rb = GetComponent<Rigidbody>();
         mesh = GetComponentInChildren<SkinnedMeshRenderer>();
 
