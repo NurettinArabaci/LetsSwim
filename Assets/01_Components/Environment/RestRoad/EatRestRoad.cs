@@ -10,6 +10,7 @@ public class EatRestRoad : MonoBehaviour
     private void Awake()
     {
         mesh = GetComponent<MeshRenderer>();
+        mesh.enabled = true;
         particle = GetComponentInChildren<ParticleSystem>();
     }
 

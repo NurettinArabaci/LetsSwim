@@ -7,7 +7,7 @@ public class UpgradeManager : MonoBehaviour
 
     public static int StaminaPrice
     {
-        get { return PlayerPrefs.GetInt("StaminaPrice", 20); }
+        get { return PlayerPrefs.GetInt("StaminaPrice", 30); }
         set { PlayerPrefs.SetInt("StaminaPrice", value); }
     }
     public static int StaminaLevel
@@ -18,7 +18,7 @@ public class UpgradeManager : MonoBehaviour
 
     public static int IncomePrice
     {
-        get { return PlayerPrefs.GetInt("IncomePrice", 20); }
+        get { return PlayerPrefs.GetInt("IncomePrice", 30); }
         set { PlayerPrefs.SetInt("IncomePrice", value); }
     }
     public static int IncomeLevel
@@ -39,3 +39,5 @@ public class UpgradeManager : MonoBehaviour
         return false;
     }
 }
+
+public enum UpgradeType { Stamina, Income }

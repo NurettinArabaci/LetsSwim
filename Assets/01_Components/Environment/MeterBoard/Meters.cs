@@ -9,11 +9,11 @@ public class Meters : MonoBehaviour
 
     private void Awake()
     {
-        meterText = GetComponent<TextMeshPro>();
+        meterText = GetComponentInChildren<TextMeshPro>();
     }
     void Start()
     {
-        meterText.text = (transform.parent.localPosition.z*100).ToString()+"m";
+        meterText.text = (transform.localPosition.z*100).ToString()+"m";
     }
 
     

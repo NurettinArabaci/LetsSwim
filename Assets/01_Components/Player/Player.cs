@@ -19,6 +19,7 @@ public class Player : MonoBehaviour
 
     [SerializeField] protected Animator mAnim;
     [SerializeField] protected Animator lowHpAnim;
+    [SerializeField] protected Transform meshTransform;
 
     protected SkinnedMeshRenderer mesh;
 
@@ -57,6 +58,8 @@ public class Player : MonoBehaviour
 
         rb = GetComponent<Rigidbody>();
         mesh = GetComponentInChildren<SkinnedMeshRenderer>();
+
+        meshTransform.parent = this.transform;
 
         breath = 100;
 

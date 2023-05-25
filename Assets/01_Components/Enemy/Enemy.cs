@@ -14,7 +14,7 @@ public class Enemy : MonoBehaviour
     private Transform mT;
 
     private Vector3 target;
-    
+
     private Vector3 offset;
 
     private Rigidbody rb;
@@ -23,13 +23,13 @@ public class Enemy : MonoBehaviour
 
     private float Speed
     {
-        get=> Vector3.Distance(followObj.position, mT.position) >= 9 ? 10 : 9.3f;
+        get => Vector3.Distance(followObj.position, mT.position) >= 9 ? 10 : 9.3f;
     }
     #endregion
 
     private bool enemyMove;
 
-    
+
 
     private void Awake()
     {
@@ -37,7 +37,7 @@ public class Enemy : MonoBehaviour
 
         EventManager.OnPlayerMove += () => enemyMove = true;
 
-        offset = Vector3.back*2+Vector3.up;
+        offset = Vector3.back * 2 + Vector3.up * 1.4f;
     }
 
 
@@ -47,13 +47,13 @@ public class Enemy : MonoBehaviour
             return;
 
         Movement();
-        
+
 
     }
 
     void Movement()
     {
-        target = Vector3.MoveTowards(mT.position, followObj.position + offset , Speed * Time.fixedDeltaTime);
+        target = Vector3.MoveTowards(mT.position, followObj.position + offset, Speed * Time.fixedDeltaTime);
         rb.MovePosition(target);
         mT.LookAt(followObj.position + Vector3.up);
 
@@ -79,6 +79,25 @@ public class Enemy : MonoBehaviour
         StartCoroutine(MoveAfterFeeding());
     }
 
+    public void EatRestRoad(EatRestRoad eatRestRoad)
+    {
+        eatRestRoad.EatRoad();
+
+        anim.SetTrigger("boxAttack");
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.TryGetComponent(out EatRestRoad eatRestRoad))
+        {
+            EatRestRoad(eatRestRoad);
+        }
+
+
+    }
+
+
+
     void References()
     {
         mT = transform;
@@ -100,31 +119,9 @@ public class Enemy : MonoBehaviour
 
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-       if (other.CompareTag("StartPoint"))
-        {
-            enemyMove = false;
-
-            rb.AddForce((Vector3.forward + Vector3.down / 6)*500);
-
-
-        }
-
-        if (other.CompareTag("EndPoint"))
-        {
-            StartCoroutine(DelayMove());
-
-        }
-    }
     private void OnDisable()
     {
         EventManager.OnPlayerMove -= () => enemyMove = true;
     }
-    IEnumerator DelayMove()
-    {
-        yield return new WaitForSeconds(0.6f);
-        enemyMove = true;
-        rb.velocity = Vector3.zero;
-    }
+
 }
