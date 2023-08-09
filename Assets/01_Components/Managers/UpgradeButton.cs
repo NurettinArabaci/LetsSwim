@@ -49,7 +49,7 @@ public class UpgradeButton : UpgradeManager
     {
         button = GetComponentInChildren<Button>();
 
-        UpdateTexts(UpgradePrice.ToString() + "$", "lvl " + UpgradeLevel.ToString());
+        
         button.onClick.AddListener(UpgradeProcess);
 
         EventManager.OnCheckMoney += OnCheckMoney;
@@ -57,6 +57,10 @@ public class UpgradeButton : UpgradeManager
         EventManager.Fire_OnCheckMoney();
     }
 
+    private void Start()
+    {
+        UpdateTexts(UpgradePrice.ToString() + "$", "lvl " + UpgradeLevel.ToString());
+    }
 
     public void UpdateTexts(string _priceText, string _upgradeLevelText)
     {

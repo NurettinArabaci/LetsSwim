@@ -17,7 +17,7 @@ public class PlayerMovement : Player
 
     void OnMove()
     {
-        GetComponent<Rigidbody>().AddForce(Vector3.forward * 500 * Time.fixedDeltaTime, ForceMode.Acceleration);
+        rb.AddForce(Vector3.forward * 500 * Time.fixedDeltaTime, ForceMode.Acceleration);
         AnimationChanging(AnimParam.idle, AnimParam.swim);
 
         rb.drag = 0f;

@@ -31,7 +31,7 @@ public class UIManager : MonoBehaviour
 
     private void Start()
     {
-        startPanel.SetActive(true);
+//        startPanel.SetActive(true);
         failedPanel.SetActive(false);
         
     }

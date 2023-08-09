@@ -2,16 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
-
-public class StartButton : MonoBehaviour
+public class StartButton : MonoBehaviour, IPointerDownHandler
 {
-    Button button;
+    //Button button;
 
     private void Awake()
     {
-        button=GetComponent<Button>();
-        button.onClick.AddListener(StartButtonRun);
+       // button=GetComponent<Button>();
+        //button.onClick.AddListener(StartButtonRun);
     }
 
 
@@ -22,7 +22,11 @@ public class StartButton : MonoBehaviour
 
         EventManager.Fire_OnPlayerMove();
 
-        //UIManager.instance.upgradePanel.SetActive(false);
         transform.parent.gameObject.SetActive(false);
+    }
+
+    public void OnPointerDown(PointerEventData eventData)
+    {
+        StartButtonRun();
     }
 }
