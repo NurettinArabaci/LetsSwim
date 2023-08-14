@@ -11,15 +11,17 @@ public class UIManager : MonoBehaviour
     public static UIManager instance;
 
     [SerializeField] private GameObject startPanel;
-    [SerializeField] public GameObject failedPanel;
-    [SerializeField] public GameObject upgradePanel;
-    [SerializeField] public TextMeshProUGUI coin;
-    [SerializeField] TextMeshProUGUI distanceAmount;
+    [SerializeField] private TextMeshProUGUI distanceAmount;
+    [SerializeField] private GameObject inGamePanel;
 
-    [SerializeField] public TextMeshProUGUI scoreAmount;
-    [SerializeField] public TextMeshProUGUI highScoreAmount;
-    [SerializeField] public TextMeshProUGUI bestScoreText;
-    [SerializeField] public GameObject newHighScoreText;
+    public TextMeshProUGUI coin;
+    public TextMeshProUGUI scoreAmount;
+    public TextMeshProUGUI highScoreAmount;
+    public TextMeshProUGUI bestScoreText;
+    public GameObject newHighScoreText;
+
+    public GameObject failedPanel;
+    public GameObject upgradePanel;
 
     private void Awake()
     {
@@ -31,9 +33,17 @@ public class UIManager : MonoBehaviour
 
     private void Start()
     {
-//        startPanel.SetActive(true);
+        //        startPanel.SetActive(true);
+
+        EventManager.OnPlayerMove += PanelOpen;
         failedPanel.SetActive(false);
+        inGamePanel.SetActive(false);
         
+    }
+
+    void PanelOpen()
+    {
+        inGamePanel.SetActive(true);
     }
 
     public void Restart()
@@ -51,13 +61,32 @@ public class UIManager : MonoBehaviour
 
     public void CoinChange(int distance)
     {
-        double x = Player.Wallet + Player.CoinTemp;
-        coin.text = String.Format("{0:0.0}", Math.Round(x, 1));
+        coin.text = MoneyText();
       
         distanceAmount.text = distance.ToString();
         bestScoreText.text = ScoreManager.HighScore.ToString() + " m";
 
     }
-  
+
+    string MoneyText()
+    {
+        var coinAmount = Player.Wallet + Player.CoinTemp;
+        if (coinAmount > 999 && coinAmount < 1000000)
+        {
+            return $"{String.Format("{0:0.00}", Math.Round((float)coinAmount / 1000, 2))}K $";
+        }
+        else if (coinAmount >= 1000000 && coinAmount < 1000000000)
+        {
+            return $"{String.Format("{0:0.00}", Math.Round((float)coinAmount / 1000000, 2))}M $";
+        }
+
+        return coinAmount.ToString("0.0") + " $";
+    }
+
+    private void OnDisable()
+    {
+        EventManager.OnPlayerMove -= PanelOpen;
+    }
+
 
 }

@@ -34,12 +34,8 @@ public class GameManager : MonoSingleton<GameManager>
                 HandlePlay();
                 break;
 
-            case GameState.Minigame:
-                HandleMinigame();
-                break;
-
             case GameState.GameEnd:
-                HandleMinigame();
+                HandleGameEnd();
                 break;
 
             case GameState.Win:

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public partial class EventManager
 {
@@ -20,6 +21,7 @@ public class Player : MonoBehaviour
     [SerializeField] protected Animator mAnim;
     [SerializeField] protected Animator lowHpAnim;
     [SerializeField] protected Transform meshTransform;
+    [SerializeField] protected Image energyFillAmount;
 
     protected SkinnedMeshRenderer mesh;
 
@@ -126,6 +128,8 @@ public class Player : MonoBehaviour
             breath -= Stamina * Time.deltaTime;
            
             ColorLevel();
+
+            energyFillAmount.fillAmount = breath / 100;
         }
 
     }
@@ -137,6 +141,8 @@ public class Player : MonoBehaviour
             breath += Stamina * 0.5f * Time.deltaTime;
 
             ColorLevel();
+
+            energyFillAmount.fillAmount = breath / 100;
         }
 
     }

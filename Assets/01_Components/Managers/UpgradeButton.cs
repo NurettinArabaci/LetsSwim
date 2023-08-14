@@ -59,7 +59,7 @@ public class UpgradeButton : UpgradeManager
 
     private void Start()
     {
-        UpdateTexts(UpgradePrice.ToString() + "$", "lvl " + UpgradeLevel.ToString());
+        UpdateTexts(UpgradePrice.ToString() + " $", "lvl " + UpgradeLevel.ToString());
     }
 
     public void UpdateTexts(string _priceText, string _upgradeLevelText)
@@ -101,7 +101,7 @@ public class UpgradeButton : UpgradeManager
             Player.Wallet -= UpgradePrice;
             StaminaOrIncome();
             UpgradeLevel++;
-            UpdateTexts(UpgradePrice.ToString() + "$", "lvl " + UpgradeLevel.ToString());
+            UpdateTexts(UpgradePrice.ToString() + " $", "lvl " + UpgradeLevel.ToString());
 
             EventManager.Fire_OnPlayVfxOneShot(VfxType.Upgrade);
             EventManager.Fire_OnCoinAnimation();
